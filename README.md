@@ -1,5 +1,13 @@
 # Quizy
 
+
+
+DB 
+
+![DB_Structure](.\DB_Structure.png)
+
+
+
 ## Deploy app:
 - `npm install`
 - `npm start`
