@@ -23,4 +23,5 @@ function Authentication() {
     return <Login isLogin={isLogin} isRegister={isRegister} /> 
   }
 }
+// export
 export default Authentication;

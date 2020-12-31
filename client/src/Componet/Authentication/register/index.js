@@ -7,7 +7,7 @@ import { withRouter } from 'react-router-dom';
 function Register(props) {
   // RegisterInfo
   const [registerInfo, setRegisterInfo] = useState({ fullName: "", userName: "", userPassword: "" });
-  const [message, setMessage] = useState('nada');
+  const [message, setMessage] = useState('');
   // Form Action
   // onChange - get and set state for Register form
   const handleChange = (e) => {
@@ -27,7 +27,7 @@ function Register(props) {
           if (data.data.error){
             setMessage("User alredy exit?" + JSON.stringify(data.data.error))
           } else if (data.data._id) {
-              setMessage("User Good to go!" + JSON.stringify(data.data))
+              setMessage("User Good to go! " + JSON.stringify(data.data.username))
               // wait 2.5sec and goto Dashboard - IF its good login
               // setTimeout(() => props.history.push("/dashboard"), 2500);
           } else { setMessage("Something else wrong") }
@@ -39,7 +39,7 @@ function Register(props) {
   return (
     <Container>
       <div style={{ position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%, -50%)' }}>
-        {JSON.stringify(message)} - {JSON.stringify(registerInfo)}
+        {message}
         <Row className="justify-content-md-center">
           <input style={{ margin:'5px' }} name="fullName" type="text" placeholder="Full Name"
             onChange={handleChange} value={registerInfo.fullName} required />

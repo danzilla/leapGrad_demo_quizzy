@@ -6,8 +6,7 @@ import { withRouter } from 'react-router-dom';
 function Login(props) {
   // loginInfo
   const [loginInfo, setLoginInfo] = useState({ userName: "", userPassword: "" });
-  const [message, setMessage] = useState('nada');
-  // Form Action
+  const [message, setMessage] = useState('');
   // onChange - get and set state for Login form
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -26,7 +25,7 @@ function Login(props) {
           if (data.data.error){
             setMessage("User name and Password bad..." + JSON.stringify(data.data.error))
           } else if (data.data._id) {
-              setMessage("User name and Password are Good!" + JSON.stringify(data.data))
+              setMessage("User name and Password are Good! " + data.data.fullname)
               sessionStorage.setItem('session', JSON.stringify(data.data));
               // wait 2.5sec and goto Dashboard - IF its good login
               setTimeout(() => props.history.push("/dashboard"), 2500);
@@ -39,7 +38,7 @@ function Login(props) {
   return (
     <Container>
       <div style={{ position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%, -50%)' }}>
-        {JSON.stringify(message)} - {JSON.stringify(loginInfo)}
+        {message}
         <Row className="justify-content-md-center">
           <Col>
             <input style={{ margin:'5px' }} name="userName" type="text"

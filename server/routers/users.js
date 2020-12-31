@@ -23,7 +23,7 @@ router.post("/add", async (req, res) => {
         const user = await userModel.findOne({ username: req.body.username })
         if (user == null) {
             const addUser = new userModel({
-                fullname: req.body.fullname,
+                fullname: req.body.fullName,
                 username: req.body.username,
                 password: req.body.password
             })
