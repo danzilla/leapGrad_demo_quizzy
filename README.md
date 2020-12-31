@@ -1,12 +1,7 @@
 # Quizy
 
-
-
-DB 
-
-![DB_Structure](.\DB_Structure.png)
-
-
+##DB_Structure 
+![DB_Structure](https://github.com/danzilla/leapGrad_demo_quizzy/blob/main/DB_Structure.png)
 
 ## Deploy app:
 - `npm install`
