@@ -9,6 +9,8 @@ const mongoose = require("mongoose")
 
 // Router
 const userRouter = require('./routers/users')
+const scoreRouter = require('./routers/scores')
+
 mongoose
     .connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
 	.then(() => {
@@ -17,6 +19,7 @@ mongoose
         // App
         const app = express()
         app.use('/user', userRouter)
+        app.use('/score', scoreRouter)
 
 		app.listen(4000, () => {
             console.log('Server listening on 4000 \n')
