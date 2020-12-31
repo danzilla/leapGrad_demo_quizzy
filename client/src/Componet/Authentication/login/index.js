@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 import { Col, Row, Container, Button } from 'react-bootstrap';
 import { withRouter } from 'react-router-dom';
-
 // Login
 function Login(props) {
   // loginInfo
@@ -19,8 +19,20 @@ function Login(props) {
     if (!loginInfo.userName || !loginInfo.userPassword) {
       setMessage("User name and Password are required")
     } else {
-      setMessage("User name and Password are GOOD!")
-      props.history.push("/dashboard")
+      setMessage("Fetching...")
+      // Axios poooower
+      axios.post("http://localhost:4000/user/login", { user: loginInfo.userName, password: loginInfo.userPassword })
+      .then((data) => {
+          if (data.data.error){
+            setMessage("User name and Password bad..." + JSON.stringify(data.data.error))
+          } else if (data.data._id) {
+              setMessage("User name and Password are Good!" + JSON.stringify(data.data))
+              sessionStorage.setItem('session', JSON.stringify(data.data));
+              // wait 2.5sec and goto Dashboard - IF its good login
+              setTimeout(() => props.history.push("/dashboard"), 2500);
+          } else { setMessage("Something else wrong") }
+      })
+      .catch((err) => { setMessage("Error connecting to Auth server" + JSON.stringify(err)) });
     }
   };
   // return
@@ -30,12 +42,10 @@ function Login(props) {
         {JSON.stringify(message)} - {JSON.stringify(loginInfo)}
         <Row className="justify-content-md-center">
           <Col>
-            <input name="userName" type="text"
-              onChange={handleChange}
-              value={loginInfo.userName} required />
-            <input name="userPassword" type="password"
-              onChange={handleChange}
-              value={loginInfo.userPassword} required />
+            <input style={{ margin:'5px' }} name="userName" type="text"
+              onChange={handleChange} value={loginInfo.userName} required />
+            <input style={{ margin:'5px' }} name="userPassword" type="password"
+              onChange={handleChange} value={loginInfo.userPassword} required />
           </Col>
         </Row>
         <Row className="justify-content-md-center">
@@ -46,5 +56,5 @@ function Login(props) {
     </Container>
   );
 }
-
+// Export
 export default withRouter(Login);
