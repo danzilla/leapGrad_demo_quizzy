@@ -14,7 +14,7 @@ router.post("/add", async (req, res) => {
 	res.send(addQuestion)
 })
 
-// Delete Question
+// Update Question
 router.post("/update", async (req, res) => {
     const QuestToUpdate = await quizModel.findOneAndUpdate(
         { userID: req.body.userID, _id: req.body.questID, quiz: quiz })
