@@ -46,9 +46,9 @@ function Login(props) {
         </Row>
         <Row className="justify-content-md-center">
           <Col>
-            <input style={{ margin:'5px' }} name="userName" type="text"
+            <input style={{ margin:'5px' }} name="userName" type="text" placeholder="UserName"
               onChange={handleChange} value={loginInfo.userName} required />
-            <input style={{ margin:'5px' }} name="userPassword" type="password"
+            <input style={{ margin:'5px' }} name="userPassword" type="password" placeholder="Password"
               onChange={handleChange} value={loginInfo.userPassword} required />
           </Col>
         </Row>

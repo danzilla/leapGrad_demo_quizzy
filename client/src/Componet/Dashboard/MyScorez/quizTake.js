@@ -26,6 +26,7 @@ function TakeQuiz(props) {
         };
         for (let quizID in QandA){
             for(let i = 0; i < QuestionList.length; i++){
+                // Compare and match Question_ID
                 if(quizID === QuestionList[i]._id){
                     // Results
                     let userResult = {
@@ -38,7 +39,7 @@ function TakeQuiz(props) {
                     userResult.answer = QuestionList[i].quiz.answer;
                     userResult.userAnswer = QandA[QuestionList[i]._id];
                     // https://stackoverflow.com/questions/4244896/dynamically-access-object-property-using-variable
-                    if(QuestionList[i].quiz.answer == QandA[QuestionList[i]._id]){
+                    if(QuestionList[i].quiz.answer.toUpperCase()  == QandA[QuestionList[i]._id].toUpperCase() ){
                         userResult.score = 1;
                         userTry.score = userTry.score + 1;
                     } else {

@@ -18,7 +18,23 @@ function MyQuestions(props) {
     const { name, value } = e.target;
     setQandA({ ...QandA, [name]: value });
   };
-  // onSubmit
+  // handleDelete
+  const handleDelete = (questID) => {
+    console.log("QUEST ID " + JSON.stringify(questID));
+    setMessage("Deleting...")
+      // Axios poooower
+      axios.post("http://localhost:4000/quiz/delete", 
+        { userID: props.user, questID: questID})
+      .then((data) => {
+        if(data.data.deletedCount === 1){
+          setMessage("Question removed!")
+        } else {
+          setMessage("Error removing...")
+        }
+      })
+      .catch((err) => { setMessage("Error connecting to Auth server" + JSON.stringify(err)) });
+  };
+  // handleSubmit
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!QandA.question || !QandA.answer) {
@@ -36,6 +52,7 @@ function MyQuestions(props) {
       })
       .catch((err) => { setMessage("Error connecting to Auth server" + JSON.stringify(err)) });
     }
+    setQandA({ question: "", answer: "" })
     handleClose()
   };
   // Load user questions
@@ -53,6 +70,7 @@ function MyQuestions(props) {
           <Navbar.Brand>My Questionaries</Navbar.Brand>
           <Form inline> <Button variant="outline-info" onClick={handleShow}>Add</Button> </Form>
         </Navbar>
+        {message}
         {QuestionList.map((qa, i) => {
            // Return
            return (
@@ -67,8 +85,7 @@ function MyQuestions(props) {
                   <Card.Body>
                     <h5>Answer: {qa.quiz.answer}</h5>
                     <ButtonGroup aria-label="Edit">
-                      <Button style={{ margin:'5px' }} size="sm" variant="warning">Edit</Button>
-                      <Button style={{ margin:'5px' }} size="sm" variant="danger">Delete</Button>
+                      <Button onClick={() => handleDelete(qa._id)} style={{ margin:'5px' }} size="sm" variant="danger">Delete</Button>
                     </ButtonGroup>
                   </Card.Body>
                 </Accordion.Collapse>

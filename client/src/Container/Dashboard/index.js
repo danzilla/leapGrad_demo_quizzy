@@ -13,7 +13,7 @@ function Dashboard(props) {
   }
   // Session Manage
   let session = JSON.parse(sessionStorage.getItem('session'))
-  useEffect(() => { 
+  useEffect(() => {
     session = JSON.parse(sessionStorage.getItem('session'))
   }, [session]);
   // return
