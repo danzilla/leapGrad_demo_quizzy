@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { Navbar, Form, ButtonGroup, Col, Row, Container, Button } from 'react-bootstrap';
-import { Accordion, Card, Modal } from 'react-bootstrap';
+import {Container, Button } from 'react-bootstrap';
+import { Modal } from 'react-bootstrap';
 import axios from 'axios';
+import moment from 'moment';
 // TakeQuiz
 function TakeQuiz(props) {
     // States for Questions
     const [QuestionList, setQuestionList] = useState([])
-    const [QandA, setQandA] = useState([]);
-    const [message, setMessage] = useState('');
+    const [QandA, setQandA] = useState();
     // onChange - get and set state for Login form
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -16,16 +16,60 @@ function TakeQuiz(props) {
     // onSubmit
     const handleSubmit = (e) => {
         e.preventDefault()
-
-        console.log(JSON.stringify(QuestionList))
-        console.log(JSON.stringify(QandA))
-        props.handleClose()
+        let session = JSON.parse(sessionStorage.getItem('session'))
+        // User Try
+        let userTry = {
+            userID: session._id,
+            date: moment().format("dddd, MMMM Do YYYY, h:mm:ss a"),
+            score: 0,
+            results: []
+        };
+        for (let quizID in QandA){
+            for(let i = 0; i < QuestionList.length; i++){
+                if(quizID === QuestionList[i]._id){
+                    // Results
+                    let userResult = {
+                        question: '',
+                        answer: '',
+                        userAnswer: '',
+                        score: ''
+                    }
+                    userResult.question = QuestionList[i].quiz.question;
+                    userResult.answer = QuestionList[i].quiz.answer;
+                    userResult.userAnswer = QandA[QuestionList[i]._id];
+                    // https://stackoverflow.com/questions/4244896/dynamically-access-object-property-using-variable
+                    if(QuestionList[i].quiz.answer == QandA[QuestionList[i]._id]){
+                        userResult.score = 1;
+                        userTry.score = userTry.score + 1;
+                    } else {
+                        userResult.score = 0;
+                    }
+                    userTry.results.push(userResult)
+                    // console.log("QID" + QuestionList[i]._id);
+                    // console.log("Q" + QuestionList[i].quiz.question);
+                    // console.log("QA" + QuestionList[i].quiz.answer);
+                    // console.log("CA" + QandA[QuestionList[i]._id]);
+                }
+            }
+        }
+        // If array is full and good
+        if (userTry.results && userTry.results.length) {
+            // Axios poooower
+            axios.post("http://localhost:4000/score/add", { resultz: userTry})
+            .then((data) => {
+                console.log(JSON.stringify(data.data));
+            })
+            .catch((err) => { console.log("Error connecting to Auth server" + JSON.stringify(err)) });
+        }
+        // console.log(JSON.stringify(QuestionList))
+        // console.log(JSON.stringify(QandA))
+        props.handleClose();
     };
     // Load user questions
     useEffect(() => {
         // Axios poooower
         axios.get("http://localhost:4000/quiz/all")
-        .then((data) => { 
+        .then((data) => {
             // Random Item from List of Questions
             let result = data.data.slice(0, 5).map(function () { 
                 return this.splice(Math.floor(Math.random() * this.length), 1)[0];
@@ -37,7 +81,6 @@ function TakeQuiz(props) {
     // return
     return (
         <>
-        {JSON.stringify(QandA)}
             <Modal.Body>
                 <Container>
                     {QuestionList.map((qa, i) => {            
@@ -59,5 +102,5 @@ function TakeQuiz(props) {
         </>
     );
 }
-
+// Export
 export default TakeQuiz;

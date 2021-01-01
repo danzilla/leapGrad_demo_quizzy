@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
-import { Navbar, Form, ButtonGroup, Col, Row, Container, Button } from 'react-bootstrap';
+import React, { useState, useEffect } from 'react';
+import { Navbar, Form, Col, Button } from 'react-bootstrap';
 import { Accordion, Card, Modal } from 'react-bootstrap';
+import axios from 'axios';
 import TakeQuiz from './quizTake';
 // MyScorez
 function MyScores(props) {
@@ -8,6 +9,15 @@ function MyScores(props) {
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+  // Score
+  const [scoreList, setScoreList] = useState([])
+  // Load user questions
+  useEffect(() => {
+    // Axios poooower
+    axios.post("http://localhost:4000/score/user", { userID: props.user })
+      .then((data) => { setScoreList(data.data); })
+      .catch((err) => { console.log("Error connecting to Auth server: " + JSON.stringify(err)) });
+  }, [scoreList]);
   // return
   return (
   <>
@@ -16,30 +26,34 @@ function MyScores(props) {
         <Navbar.Brand href="#home">My Score</Navbar.Brand>
         <Form inline> <Button variant="outline-info" onClick={handleShow}>Try a Quiz</Button> </Form>
       </Navbar>
-      <Accordion>
-        <Card>
-          <Card.Header>
-            <Accordion.Toggle as={Button} variant="link" eventKey="0">
-              Click me!
-            </Accordion.Toggle>
-          </Card.Header>
-          <Accordion.Collapse eventKey="0">
-            <Card.Body>Hello! I'm the body</Card.Body>
-          </Accordion.Collapse>
-        </Card>
-        <Card>
-          <Card.Header>
-            <Accordion.Toggle as={Button} variant="link" eventKey="1">
-              Click me!
-            </Accordion.Toggle>
-          </Card.Header>
-          <Accordion.Collapse eventKey="1">
-            <Card.Body>Hello! I'm another body</Card.Body>
-          </Accordion.Collapse>
-        </Card>
-      </Accordion>
-    </Col>
 
+      {scoreList.map((qa, i) => {
+        // Return
+        return (
+          <Accordion key={qa._id}>
+            <Card>
+              <Card.Header>
+                <Accordion.Toggle as={Button} variant="link" eventKey={i+1}>
+                  <p>Scored: {qa.score}</p>
+                  <p>Completed:{qa.date}</p>
+                </Accordion.Toggle>
+              </Card.Header>
+              <Accordion.Collapse eventKey={i+1}>
+                <Card.Body>
+                  {qa.results.map((value, index) => {
+                    return <>
+                        <p style={{ margin: 0 }} key={index}>Question: {value.question}</p>
+                        <p style={{ margin: 0 }} key={index}>Answer: {value.answer}</p>
+                        <p style={{ margin: 0 }} key={index}>User Answer: {value.userAnswer}</p>
+                        <br />
+                      </>
+                    })}
+                </Card.Body>
+              </Accordion.Collapse>
+            </Card>
+          </Accordion>)
+      })}
+    </Col>
     <Modal show={show} onHide={handleClose}>
       <Modal.Header closeButton>
         <Modal.Title>Random questions from users</Modal.Title>

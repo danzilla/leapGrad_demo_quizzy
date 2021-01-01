@@ -36,6 +36,7 @@ function MyQuestions(props) {
       })
       .catch((err) => { setMessage("Error connecting to Auth server" + JSON.stringify(err)) });
     }
+    handleClose()
   };
   // Load user questions
   useEffect(() => {
@@ -43,7 +44,7 @@ function MyQuestions(props) {
       axios.post("http://localhost:4000/quiz/user", { userID: props.user })
       .then((data) => { setQuestionList(data.data); })
       .catch((err) => { console.log("Error connecting to Auth server: " + JSON.stringify(err)) });
-  }, [QuestionList]);
+  }, [QuestionList, props.user]);
   // return
   return (
     <>

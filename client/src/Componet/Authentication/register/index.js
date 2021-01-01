@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { Col, Row, Container, Button } from 'react-bootstrap';
+import { Row, Container, Button } from 'react-bootstrap';
 import { withRouter } from 'react-router-dom';
 
 // Register

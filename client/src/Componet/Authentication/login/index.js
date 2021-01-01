@@ -38,7 +38,12 @@ function Login(props) {
   return (
     <Container>
       <div style={{ position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%, -50%)' }}>
-        {message}
+        <Row className="justify-content-md-center">
+          <h1>Quizzy </h1>
+        </Row>
+        <Row className="justify-content-md-center">
+          <p>{message}</p>
+        </Row>
         <Row className="justify-content-md-center">
           <Col>
             <input style={{ margin:'5px' }} name="userName" type="text"

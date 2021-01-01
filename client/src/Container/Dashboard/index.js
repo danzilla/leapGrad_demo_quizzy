@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { Navbar, Form, Nav, Row, Container, Button } from 'react-bootstrap';
-import { Accordion, Card } from 'react-bootstrap';
 // Componetz
 import MyQuestions from '../../Componet/Dashboard/MyQuestionz';
 import MyScores from '../../Componet/Dashboard/MyScorez';
